@@ -11,7 +11,13 @@
 ## Installation
 <p>1) Clone this repo: git clone git@github.com:SemenecVlad/triviaApp.git or git clone https://github.com/SemenecVlad/triviaApp.git</p>
 <br />
-<p>2) Run `npm install` or `yarn install` (if you are using yarn)</p>
+<p>2) Run 
+  .. code-block:: bash
+    $ npm install
+  or
+  .. code-block:: bash
+    $ yarn install
+</p>
 <br />
 <p>3) For IOS -> Go to `ios` folder and run `pod install`</p>
 <br />
