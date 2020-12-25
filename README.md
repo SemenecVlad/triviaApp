@@ -1,6 +1,5 @@
 <h1 align="center">
   <img src="https://github.com/SemenecVlad/triviaApp/blob/master/assets/Images/trivia_logo.svg" alt="Bear Stone Smart Home" width="200">
-  Trivia App (example)
 </h1>
 
 ## Basic Overview
