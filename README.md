@@ -1,5 +1,7 @@
-<img src="https://github.com/SemenecVlad/triviaApp/blob/master/assets/Images/trivia_logo.svg" alt="Bear Stone Smart Home" width="200">
-<h1 align="center">Trivia App (example)</h1>
+<h1 align="center">
+  <img src="https://github.com/SemenecVlad/triviaApp/blob/master/assets/Images/trivia_logo.svg" alt="Bear Stone Smart Home" width="200">
+  Trivia App (example)
+</h1>
 
 ## Basic Overview
 <p>This is a small game similar to one of the most popular games (very basic)</p>
