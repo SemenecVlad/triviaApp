@@ -24,7 +24,7 @@ export const RatingBar = (props: IProps) => {
   return (
   <View style={styles.wrapper}>
     {
-      starsToRender.map((star => <SvgXml xml={star.correct ? StarOrange : StarViolet} style={{marginRight: 5}} />))
+      starsToRender.map(((star, index) => <SvgXml key={index} xml={star.correct ? StarOrange : StarViolet} style={{marginRight: 5}} />))
     }
   </View>
 )};

@@ -1,11 +1,15 @@
-import { useDispatch } from "react-redux";
+// import { useDispatch } from "react-redux";
 import {
   decrement,
   increment
 } from '../Reducers/counterReducer';
 
-const dispatch = useDispatch();
+// These actions just for test purposes
 
-export const incrementNumber = () => dispatch(increment());
+export const incrementNumber = () => (dispatch: any) => {
+  return dispatch(increment())
+}
 
-export const decrementNumber = () => dispatch(decrement());
+export const decrementNumber = () => (dispatch: any) => {
+  return dispatch(decrement())
+}

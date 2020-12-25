@@ -11,11 +11,13 @@ interface IProps {
   textColor: string;
   bgColors: Array<string>;
   shadowColor?: string;
+  disabled?: boolean;
 }
 
 export const GradientButton: FunctionComponent<IProps> = (props) => (
   <TouchableOpacity
     onPress={props.onPress}
+    disabled={props.disabled}
     style={[styles.button, props.shadowColor ? {
       shadowOffset:{  width: 0,  height: 4,  },
       shadowColor: props.shadowColor,

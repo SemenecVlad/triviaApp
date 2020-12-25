@@ -1,9 +1,12 @@
 import { StackActions } from "@react-navigation/native";
 import React, {Component} from "react";
-import {View, Text, StatusBar, StyleSheet, Dimensions} from "react-native";
-import { ScrollView } from "react-native-gesture-handler";
+import {View, Text, StatusBar, Dimensions} from "react-native";
+import { FlatList, TouchableOpacity } from "react-native-gesture-handler";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { SvgXml } from "react-native-svg";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { resetCards } from "../../Actions/cardActions";
 import { AnswerCard, GradientButton } from "../../Components";
 import { RatingBar } from "../../Components/RatingBar";
 import { CloseWhitemg } from "../../Components/SvgItems/CloseWhite";
@@ -11,62 +14,55 @@ import { UserImg } from "../../Components/SvgItems/UserImg";
 import { colors } from "../../Styles/colors";
 import { fonts } from "../../Styles/fonts";
 import { commonStyles } from "../../Styles/styles";
+import _ from "lodash";
+import { resultsStyles } from "./styles";
+
+interface IProps {
+  cards: Array<any>;
+  resetCards(): void;
+  navigation: any;
+}
 
 const HEIGHT = Dimensions.get("window").height;
 
-export default class ResultsScreen extends Component<any, any> {
+class ResultsScreen extends Component<IProps, any> {
 
-  goToMain = () => this.props.navigation.dispatch(StackActions.popToTop());
+  goToMain = () => {
+    this.props.resetCards();
+    this.props.navigation.dispatch(StackActions.popToTop())
+  };
+
+  renderItem = ({item}:any) => (
+    <AnswerCard
+      isCorrect={item.isCorrect === item.correct_answer}
+      text={_.unescape(item.question)}
+    />
+  )
+
+  keyExtractor = (item: any) => item.question
 
   render() {
+    const correctAnswers: any = this.props.cards.filter((i: any) => i.isCorrect === i.correct_answer).length;
     return(
       <SafeAreaView style={commonStyles.violetWrapper}>
         <StatusBar barStyle='light-content' />
         <View style={[commonStyles.violetWrapper, {paddingHorizontal: 20, marginTop: 45, height: HEIGHT}]}>
-          <View style={commonStyles.closeCircleWrapper}>
+          <TouchableOpacity onPress={this.goToMain} style={commonStyles.closeCircleWrapper}>
             <SvgXml xml={CloseWhitemg} />
-          </View>
-          <View style={styles.row}>
+          </TouchableOpacity>
+          <View style={resultsStyles.row}>
             <SvgXml xml={UserImg} style={{marginRight: 10}} />
-            <Text style={styles.title}>You scored </Text>
-            <Text style={styles.title}><Text style={styles.correctAnswers}>6</Text>/10</Text>
+            <Text style={resultsStyles.title}>You scored </Text>
+            <Text style={resultsStyles.title}><Text style={resultsStyles.correctAnswers}>{correctAnswers}</Text>/{this.props.cards.length}</Text>
           </View>
-          <RatingBar correct={6} totalQuestions={10} />
-          <ScrollView style={{marginTop: 10, marginBottom: 40}}>
-            <AnswerCard
-              isCorrect={true}
-              text={"The retail disc of Tony Hawk’s Pro Skater 5 only comes with the tutorial."}
-            />
-            <AnswerCard
-              isCorrect={false}
-              text={"In “Metal Gear Solid 2”, you will see through the eyes of Psycho Mantis if you go first person during his boss fight."}
-            />
-            <AnswerCard
-              isCorrect={true}
-              text={"The retail disc of Tony Hawk’s Pro Skater 5 only comes with the tutorial."}
-            />
-            <AnswerCard
-              isCorrect={false}
-              text={"In “Metal Gear Solid 2”, you will see through the eyes of Psycho Mantis if you go first person during his boss fight."}
-            />
-            <AnswerCard
-              isCorrect={true}
-              text={"The retail disc of Tony Hawk’s Pro Skater 5 only comes with the tutorial."}
-            />
-            <AnswerCard
-              isCorrect={false}
-              text={"In “Metal Gear Solid 2”, you will see through the eyes of Psycho Mantis if you go first person during his boss fight."}
-            />
-            <AnswerCard
-              isCorrect={true}
-              text={"The retail disc of Tony Hawk’s Pro Skater 5 only comes with the tutorial."}
-            />
-            <AnswerCard
-              isCorrect={false}
-              text={"In “Metal Gear Solid 2”, you will see through the eyes of Psycho Mantis if you go first person during his boss fight."}
-            />
-          </ScrollView>
-          <View style={styles.bottom}>
+          <RatingBar correct={correctAnswers} totalQuestions={this.props.cards.length} />
+          <FlatList
+            keyExtractor={this.keyExtractor}
+            style={{marginTop: 10, marginBottom: 40}}
+            data={this.props.cards}
+            renderItem={this.renderItem}
+          />
+          <View style={resultsStyles.bottom}>
             <GradientButton
               text="PLAY AGAIN"
               onPress={this.goToMain}
@@ -81,26 +77,18 @@ export default class ResultsScreen extends Component<any, any> {
   }
 }
 
-const styles = StyleSheet.create({
-  bottom: {
-    flex: 1,
-    justifyContent: "flex-end",
-    paddingBottom: 36,
-    paddingTop: 36,
-    backgroundColor: colors.violet
-  },
-  row: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center"
-  },
-  title: {
-    fontFamily: fonts.Bold,
-    fontSize: 19,
-    color: colors.white
-  },
-  correctAnswers: {
-    color: colors.darkOrange,
-    fontSize: 24
+const mapStateToProps = (state: any) => {
+  return {
+    cards: state.cards.cards,
+    currentCardIndex: state.cards.currentCardIndex
   }
-})
+};
+
+const mapDispatchToProps = (dispatch: any) => bindActionCreators(
+  {
+    resetCards
+  },
+  dispatch
+);
+
+export default connect(mapStateToProps, mapDispatchToProps)(ResultsScreen);
